@@ -1,6 +1,5 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include <glm.hpp>
 
 using namespace std;
 
@@ -11,9 +10,6 @@ int main()
 		return -1;
 	}
 
-	glm::fvec2 v( 3.0f, 4.0f );
-	cout << glm::length( v ) << endl;
-
 	GLFWwindow * window = glfwCreateWindow( 1024, 768, "TestCLion", NULL, NULL );
 	if( window == NULL )
 	{
@@ -22,6 +18,8 @@ int main()
 	}
 
 	glfwMakeContextCurrent( window );
+
+	cout << glGetString( GL_VERSION ) << endl;
 
 	while( !glfwWindowShouldClose( window ) )
 	{
