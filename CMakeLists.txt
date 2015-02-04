@@ -12,6 +12,7 @@ include_directories(external/glew/include)
 
 add_definitions(-DGLEW_STATIC)
 
-set(SOURCE_FILES external/glew/src/glew.c ${SOURCE_DIR}/*.cpp)
-add_executable(Yage ${SOURCE_FILES})
+file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/*.cpp")
+
+add_executable(Yage external/glew/src/glew.c ${SOURCE_FILES})
 target_link_libraries(Yage glfw ${GLFW_LIBRARIES})
