@@ -12,11 +12,6 @@ public:
 	ShaderProgram();
 	~ShaderProgram();
 
-	bool IsLinkSucceeded() const
-	{
-		return mIsLinkSucceeded;
-	}
-
 	const std::string & GetLinkError() const
 	{
 		return mLinkError;
@@ -25,13 +20,11 @@ public:
 	void AttachShader( Shader * shader );
 	void DetachShader( Shader * shader );
 
-	void Link();
+	bool Link();
 	void Use();
 
 private:
 	GLuint mId;
-	std::vector<Shader *> mShaders;
-	bool mIsLinkSucceeded;
 	std::string mLinkError;
 };
 

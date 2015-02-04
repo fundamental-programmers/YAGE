@@ -27,15 +27,14 @@ void ShaderProgram::DetachShader( Shader * shader )
 }
 
 
-void ShaderProgram::Link()
+bool ShaderProgram::Link()
 {
 	glLinkProgram( mId );
 
 	GLint status;
 	glGetProgramiv( mId, GL_LINK_STATUS, &status );
-	mIsLinkSucceeded = status != GL_FALSE;
 
-	if( mIsLinkSucceeded == false )
+	if( status == GL_FALSE )
 	{
 		GLint len = 0;
 		glGetProgramiv( mId, GL_INFO_LOG_LENGTH, &len );
@@ -48,6 +47,8 @@ void ShaderProgram::Link()
 			delete[] buffer;
 		}
 	}
+
+	return status != GL_FALSE;
 }
 
 

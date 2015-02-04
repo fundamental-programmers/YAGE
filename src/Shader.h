@@ -22,11 +22,6 @@ public:
 		return mType;
 	}
 
-	bool IsCompileSucceeded() const
-	{
-		return mIsCompileSucceeded;
-	}
-
 	const std::string & GetCompileError() const
 	{
 		return mCompileError;
@@ -35,12 +30,11 @@ public:
 	void LoadFromFile( const std::string & filename );
 	void LoadFromString( const std::string & str );
 
-	void Compile();
+	bool Compile();
 
 private:
 	GLuint mId;
 	ShaderType mType;
-	bool mIsCompileSucceeded;
 	std::string mCompileError;
 };
 

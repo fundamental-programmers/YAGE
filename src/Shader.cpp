@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Shader.h"
 
 BEGIN_YAGE_NAMESPACE
@@ -5,8 +6,6 @@ BEGIN_YAGE_NAMESPACE
 
 Shader::Shader( ShaderType type )
 	: mType( type )
-	, mIsCompileSucceeded( false )
-	, mCompileError( "" )
 {
 	GLenum glShaderType = 0;
 	switch( type )
@@ -31,9 +30,11 @@ Shader::~Shader()
 
 void Shader::LoadFromFile( const std::string & filename )
 {
-	std::ifstream file( filename );
+	std::ifstream file( filename.c_str() );
 	std::string str = "";
 	str.assign( std::istreambuf_iterator<char>( file ), std::istreambuf_iterator<char>() );
+
+	std::cout << str << std::endl;
 
 	this->LoadFromString( str );
 }
@@ -46,15 +47,14 @@ void Shader::LoadFromString( const std::string & str )
 }
 
 
-void Shader::Compile()
+bool Shader::Compile()
 {
 	glCompileShader( mId );
 
 	GLint result = 0;
 	glGetShaderiv( mId, GL_COMPILE_STATUS, &result );
-	mIsCompileSucceeded = result != GL_FALSE;
 
-	if( mIsCompileSucceeded == false )
+	if( result == GL_FALSE )
 	{
 		GLint len = 0;
 		glGetShaderiv( mId, GL_INFO_LOG_LENGTH, &len );
@@ -62,11 +62,13 @@ void Shader::Compile()
 		{
 			char * buffer = new char[len];
 			GLsizei size = 0;
-			glGetShaderInfoLog( mIsCompileSucceeded, len, &size, buffer );
+			glGetShaderInfoLog( mId, len, &size, buffer );
 			mCompileError = buffer;
 			delete[] buffer;
 		}
 	}
+
+	return result != GL_FALSE;
 }
 
 
