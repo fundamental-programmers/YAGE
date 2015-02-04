@@ -22,7 +22,10 @@ int main()
 
 	glewInit();
 
-	cout << glGetString( GL_VERSION ) << endl;
+	cout << "GL Vendor: " << glGetString( GL_VENDOR ) << endl;
+	cout << "GL Renderer: " << glGetString( GL_RENDERER ) << endl;
+	cout << "GL Version: " << glGetString( GL_VERSION ) << endl;
+	cout << "GLSL Version: " << glGetString( GL_SHADING_LANGUAGE_VERSION ) << endl;
 
 	while( !glfwWindowShouldClose( window ) )
 	{
