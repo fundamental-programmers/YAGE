@@ -1,4 +1,5 @@
 #include <iostream>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 using namespace std;
@@ -18,6 +19,8 @@ int main()
 	}
 
 	glfwMakeContextCurrent( window );
+
+	glewInit();
 
 	cout << glGetString( GL_VERSION ) << endl;
 
