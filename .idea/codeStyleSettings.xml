@@ -4,6 +4,7 @@
     <option name="PER_PROJECT_SETTINGS">
       <value>
         <Objective-C>
+          <option name="INDENT_NAMESPACE_MEMBERS" value="0" />
           <option name="NAMESPACE_BRACE_PLACEMENT" value="2" />
           <option name="FUNCTION_BRACE_PLACEMENT" value="2" />
           <option name="BLOCK_BRACE_PLACEMENT" value="2" />
@@ -44,6 +45,9 @@
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
         <codeStyleSettings language="ObjectiveC">
+          <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
+          <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
+          <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
           <option name="BRACE_STYLE" value="2" />
           <option name="CLASS_BRACE_STYLE" value="2" />
           <option name="ELSE_ON_NEW_LINE" value="true" />
