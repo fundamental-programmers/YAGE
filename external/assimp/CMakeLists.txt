@@ -7,7 +7,7 @@ set (ASSIMP_VERSION_MINOR 1)
 set (ASSIMP_VERSION_PATCH 1) # subversion revision?
 set (ASSIMP_VERSION ${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_MINOR}.${ASSIMP_VERSION_PATCH})
 set (ASSIMP_SOVERSION 3)
-set (PROJECT_VERSION "${ASSIMP_VERSION}")
+#set (PROJECT_VERSION "${ASSIMP_VERSION}")
 
 set(ASSIMP_PACKAGE_VERSION "0" CACHE STRING "the package-specific version used for uploading the sources")
 
@@ -45,7 +45,10 @@ set(LIBASSIMP-DEV_COMPONENT "libassimp${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_M
 set(CPACK_COMPONENTS_ALL assimp-bin ${LIBASSIMP_COMPONENT} ${LIBASSIMP-DEV_COMPONENT} assimp-dev)
 set(ASSIMP_LIBRARY_SUFFIX "" CACHE STRING "Suffix to append to library names")
 
-if((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
+if(CMAKE_COMPILER_IS_MINGW)
+  # or you may get a warning "too many sections" when linking IFCReaderGen.cpp.obj
+  add_definitions( -Og )
+elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   add_definitions(-fPIC) # this is a very important switch and some libraries seem now to have it....
   # hide all not-exported symbols
   add_definitions( -fvisibility=hidden -Wall )
