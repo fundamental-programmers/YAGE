@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Time.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -30,6 +31,8 @@ void Game::Run()
 
 	while( glfwWindowShouldClose( mWindow->mWindow ) == false )
 	{
+		Time::GetMain()->Update();
+
 		this->Update();
 		this->Draw();
 

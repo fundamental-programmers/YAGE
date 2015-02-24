@@ -1,4 +1,8 @@
+#include <iostream>
 #include "FitbosGame.h"
+#include "Time.h"
+
+using namespace Yage;
 
 
 void FitbosGame::Initialize( GameWindowCreationDesc & desc )
@@ -18,7 +22,7 @@ void FitbosGame::Unload()
 
 void FitbosGame::Update()
 {
-
+	std::cout << Time::GetMainDeltaTime() << std::endl;
 }
 
 void FitbosGame::Draw()
