@@ -14,3 +14,14 @@
 
 #define BEGIN_YAGE_NAMESPACE namespace Yage {
 #define END_YAGE_NAMESPACE }
+
+
+template<typename T>
+void SafeDelete( T* & ptr )
+{
+	if( ptr )
+	{
+		delete ptr;
+		ptr = NULL;
+	}
+}

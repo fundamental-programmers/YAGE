@@ -3,6 +3,7 @@ project(Yage)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 set(SOURCE_DIR src)
+set(FITBOS_EXAMPLE_DIR examples/fitbos)
 
 add_subdirectory(external/glfw)
 add_subdirectory(external/assimp)
@@ -12,9 +13,11 @@ include_directories(external/glm/include)
 include_directories(external/glew/include)
 include_directories(external/assimp/include)
 
+include_directories(${SOURCE_DIR})
+
 add_definitions(-DGLEW_STATIC)
 
-file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/*.cpp")
+file(GLOB SOURCE_FILES "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/*.cpp" "${FITBOS_EXAMPLE_DIR}/*.h" "${FITBOS_EXAMPLE_DIR}/*.cpp")
 file(COPY shaders DESTINATION ${PROJECT_BINARY_DIR})
 
 add_executable(Yage external/glew/src/glew.c ${SOURCE_FILES})
