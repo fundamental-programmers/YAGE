@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "VertexBuffer.h"
 
 using namespace Yage;
 
@@ -12,4 +13,7 @@ protected:
 	virtual void Unload();
 	virtual void Update();
 	virtual void Draw();
+
+private:
+	VertexBuffer * mVertexBuffer;
 };
