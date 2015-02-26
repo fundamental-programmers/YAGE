@@ -16,9 +16,15 @@ BufferBase::~BufferBase()
 }
 
 
-void BufferBase::SetData( unsigned long size, const void * data, BufferUsage usage )
+void BufferBase::Bind()
 {
 	glBindBuffer( mType, mId );
+}
+
+
+void BufferBase::SetData( unsigned long size, const void * data, BufferUsage usage )
+{
+	this->Bind();
 	glBufferData( mType, size, data, usage );
 }
 

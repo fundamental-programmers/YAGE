@@ -18,6 +18,7 @@ public:
 		return mType;
 	}
 
+	void Bind();
 	void SetData( unsigned long size, const void * data, BufferUsage usage );
 
 protected:
