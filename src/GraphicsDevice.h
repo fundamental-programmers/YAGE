@@ -2,6 +2,9 @@
 #include "YageIncludes.h"
 #include "Color.h"
 #include "BufferClearMask.h"
+#include "VertexBuffer.h"
+#include "DrawMode.h"
+#include "ShaderProgram.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -22,6 +25,8 @@ public:
 	void SetClearStencil( int stencil );
 
 	void Clear( BufferClearMask mask );
+
+	void DrawArrays( VertexBuffer * buffer, DrawMode mode, GLint first, GLsizei count );
 };
 
 

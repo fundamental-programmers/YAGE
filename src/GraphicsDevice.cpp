@@ -62,4 +62,23 @@ void GraphicsDevice::Clear( BufferClearMask mask )
 }
 
 
+void GraphicsDevice::DrawArrays( VertexBuffer * buffer, DrawMode mode, GLint first, GLsizei count )
+{
+	for( int i = 0; i < buffer->GetAttributeCount(); i++ )
+	{
+		const VertexAttribute & attribute = buffer->GetAttribute( i );
+		glEnableVertexAttribArray( attribute.Index );
+		attribute.SetToBuffer( buffer );
+	}
+
+	glDrawArrays( mode, first, count );
+
+	for( int i = 0; i < buffer->GetAttributeCount(); i++ )
+	{
+		const VertexAttribute & attribute = buffer->GetAttribute( i );
+		glDisableVertexAttribArray( attribute.Index );
+	}
+}
+
+
 END_YAGE_NAMESPACE
