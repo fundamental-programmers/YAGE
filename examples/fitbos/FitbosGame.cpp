@@ -39,6 +39,8 @@ void FitbosGame::Load()
 	mProgram->AttachShader( mFragmentShader );
 	bool linkResult = mProgram->Link();
 	assert( linkResult );
+
+	mProgram->Use();
 }
 
 
@@ -53,6 +55,8 @@ void FitbosGame::Unload()
 
 void FitbosGame::Update()
 {
+	float scale = sinf( Time::GetMainTotalTime() );
+	mProgram->SetUniform( "gScale", scale );
 }
 
 
@@ -60,8 +64,6 @@ void FitbosGame::Draw()
 {
 	GraphicsDevice * graphics = this->GetGraphicsDevice();
 	graphics->Clear( BCM_Color );
-
-	mProgram->Use();
 
 	graphics->DrawArrays( mVertexBuffer, DM_Triangles, 0, 3 );
 }

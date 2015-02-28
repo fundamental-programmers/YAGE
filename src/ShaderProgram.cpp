@@ -58,4 +58,23 @@ void ShaderProgram::Use()
 }
 
 
+GLint ShaderProgram::GetUniformLocation( const std::string & name ) const
+{
+	return glGetUniformLocation( mId, name.c_str() );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, float value )
+{
+	glUniform1f( location, value );
+}
+
+
+void ShaderProgram::SetUniform( const std::string & name, float value )
+{
+	GLint location = this->GetUniformLocation( name );
+	this->SetUniform( location, value );
+}
+
+
 END_YAGE_NAMESPACE

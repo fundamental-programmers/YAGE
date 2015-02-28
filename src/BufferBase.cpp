@@ -22,7 +22,7 @@ void BufferBase::Bind()
 }
 
 
-void BufferBase::SetData( unsigned long size, const void * data, BufferUsage usage )
+void BufferBase::SetData( GLsizeiptr size, const void * data, BufferUsage usage )
 {
 	this->Bind();
 	glBufferData( mType, size, data, usage );

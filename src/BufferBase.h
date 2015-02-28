@@ -19,7 +19,7 @@ public:
 	}
 
 	void Bind();
-	void SetData( unsigned long size, const void * data, BufferUsage usage );
+	void SetData( GLsizeiptr size, const void * data, BufferUsage usage );
 
 protected:
 	BufferType mType;
