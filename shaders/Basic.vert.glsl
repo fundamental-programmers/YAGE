@@ -2,9 +2,12 @@
 
 layout( location = 0 ) in vec3 Position;
 
-uniform float gScale;
+out vec4 Color;
+
+uniform mat4 gRotation;
 
 void main()
 {
-    gl_Position = vec4(gScale * Position.x, gScale * Position.y, Position.z, 1.0);
+    Color = gRotation * vec4( clamp( Position, 0.0, 1.0 ), 1.0 );
+    gl_Position = gRotation * vec4( Position, 1.0 );
 }

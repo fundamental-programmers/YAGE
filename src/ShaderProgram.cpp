@@ -70,10 +70,45 @@ void ShaderProgram::SetUniform( GLint location, float value )
 }
 
 
-void ShaderProgram::SetUniform( const std::string & name, float value )
+void ShaderProgram::SetUniform( GLint location, const vec2 & value )
 {
-	GLint location = this->GetUniformLocation( name );
-	this->SetUniform( location, value );
+	glUniform2fv( location, value.length(), value_ptr( value ) );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, const vec3 & value )
+{
+	glUniform3fv( location, 1, value_ptr( value ) );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, const vec4 & value )
+{
+	glUniform4fv( location, 1, value_ptr( value ) );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, const Color & value )
+{
+	glUniform2fv( location, 1, reinterpret_cast<const GLfloat *>( &value ) );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, int value )
+{
+	glUniform1i( location, value );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, unsigned int value )
+{
+	glUniform1ui( location, value );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, const mat4x4 & value )
+{
+	glUniformMatrix4fv( location, 1, false, value_ptr( value ) );
 }
 
 

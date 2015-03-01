@@ -1,6 +1,7 @@
 #pragma once
 #include "Game.h"
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "ShaderProgram.h"
 
 using namespace Yage;
@@ -17,6 +18,7 @@ protected:
 
 private:
 	VertexBuffer * mVertexBuffer;
+	IndexBuffer * mIndexBuffer;
 	ShaderProgram * mProgram;
 	Shader * mVertexShader;
 	Shader * mFragmentShader;

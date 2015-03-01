@@ -2,6 +2,7 @@
 
 #include "YageIncludes.h"
 #include "Shader.h"
+#include "Color.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -26,8 +27,13 @@ public:
 	GLint GetUniformLocation( const std::string & name ) const;
 
 	void SetUniform( GLint location, float value );
-
-	void SetUniform( const std::string & name, float value );
+	void SetUniform( GLint location, const vec2 & value );
+	void SetUniform( GLint location, const vec3 & value );
+	void SetUniform( GLint location, const vec4 & value );
+	void SetUniform( GLint location, const Color & value );
+	void SetUniform( GLint location, int value );
+	void SetUniform( GLint location, unsigned int value );
+	void SetUniform( GLint location, const mat4x4 & value );
 
 private:
 	GLuint mId;

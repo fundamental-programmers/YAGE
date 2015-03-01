@@ -64,15 +64,36 @@ void GraphicsDevice::Clear( BufferClearMask mask )
 
 void GraphicsDevice::DrawArrays( VertexBuffer * buffer, DrawMode mode, GLint first, GLsizei count )
 {
+	this->PrepareVertexBuffer( buffer );
+	glDrawArrays( mode, first, count );
+	this->UnprepareVertexBuffer( buffer );
+}
+
+
+void GraphicsDevice::DrawElements( VertexBuffer * vertexBuffer, IndexBuffer * indexBuffer, DrawMode mode, GLsizei count, const GLvoid * indices )
+{
+	this->PrepareVertexBuffer( vertexBuffer );
+	indexBuffer->Bind();
+
+	glDrawElements( mode, count, indexBuffer->GetIndexType(), indices );
+
+	this->UnprepareVertexBuffer( vertexBuffer );
+}
+
+
+void GraphicsDevice::PrepareVertexBuffer( VertexBuffer * buffer )
+{
 	for( int i = 0; i < buffer->GetAttributeCount(); i++ )
 	{
 		const VertexAttribute & attribute = buffer->GetAttribute( i );
 		glEnableVertexAttribArray( attribute.Index );
 		attribute.SetToBuffer( buffer );
 	}
+}
 
-	glDrawArrays( mode, first, count );
 
+void GraphicsDevice::UnprepareVertexBuffer( VertexBuffer * buffer )
+{
 	for( int i = 0; i < buffer->GetAttributeCount(); i++ )
 	{
 		const VertexAttribute & attribute = buffer->GetAttribute( i );
