@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Time.h"
+#include "Input.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -27,16 +28,18 @@ void Game::Run()
 	mWindow = new GameWindow( desc );
 	mGraphicsDevice = new GraphicsDevice();
 
+	Input::Initialize( mWindow );
+
 	this->Load();
 
-	while( glfwWindowShouldClose( mWindow->mWindow ) == false )
+	while( glfwWindowShouldClose( mWindow->_GetWindow() ) == false )
 	{
 		Time::GetMain()->Update();
 
 		this->Update();
 		this->Draw();
 
-		glfwSwapBuffers( mWindow->mWindow );
+		glfwSwapBuffers( mWindow->_GetWindow() );
 		glfwPollEvents();
 	}
 

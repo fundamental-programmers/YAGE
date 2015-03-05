@@ -15,7 +15,10 @@ public:
 	Shader( ShaderType type );
 	~Shader();
 
-	friend class ShaderProgram;
+	GLuint _GetId() const
+	{
+		return mId;
+	}
 
 	ShaderType GetType() const
 	{

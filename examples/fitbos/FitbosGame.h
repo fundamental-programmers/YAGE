@@ -1,4 +1,5 @@
 #pragma once
+#include <Camera.h>
 #include "Game.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -22,4 +23,5 @@ private:
 	ShaderProgram * mProgram;
 	Shader * mVertexShader;
 	Shader * mFragmentShader;
+	Camera * mCamera;
 };

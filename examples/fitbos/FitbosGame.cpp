@@ -1,6 +1,7 @@
 #include <iostream>
 #include "FitbosGame.h"
 #include "Time.h"
+#include "Input.h"
 
 using namespace Yage;
 
@@ -12,6 +13,12 @@ void FitbosGame::Initialize( GameWindowCreationDesc & desc )
 
 void FitbosGame::Load()
 {
+	mCamera = new Camera();
+	mCamera->SetPerspective( pi<float>() / 2.0f, this->GetWindow()->GetAspectRatio(), 0.1f, 100.0f );
+	mCamera->SetPosition( vec3( 0.0f, 0.0f, 3.0f ) );
+	mCamera->SetTarget( vec3() );
+	mCamera->SetUp( vec3( 0.0f, 1.0f, 0.0f ) );
+
 	this->GetGraphicsDevice()->SetClearColor( Color::Black );
 
 	vec3 vertices[4];
@@ -56,23 +63,53 @@ void FitbosGame::Unload()
 	SafeDelete( mFragmentShader );
 	SafeDelete( mVertexShader );
 	SafeDelete( mVertexBuffer );
+	SafeDelete( mCamera );
 }
 
 
 void FitbosGame::Update()
 {
-	mat4x4 matWorld = translate( vec3( 0.0f, 0.0f, 0.0f ) );
-	mat4x4 matProj = perspective( pi<float>() / 2.0f, this->GetWindow()->GetAspectRatio(), 1.0f, 100.0f );
-	mat4x4 matView = lookAt( vec3( 0.0f, 0.0f, 3.0f ), vec3( 0.0f, 0.0f, 0.0f ), vec3( 0.0f, 1.0f, 0.0f ) );
+	vec3 moveDir;
+	if( Input::IsKeyDown( KC_W ) )
+	{
+		moveDir += mCamera->GetForward();
+	}
+	if( Input::IsKeyDown( KC_S ) )
+	{
+		moveDir -= mCamera->GetForward();
+	}
+	if( Input::IsKeyDown( KC_A ) )
+	{
+		moveDir += mCamera->GetLeft();
+	}
+	if( Input::IsKeyDown( KC_D ) )
+	{
+		moveDir -= mCamera->GetLeft();
+	}
+	if( Input::IsKeyDown( KC_E ) )
+	{
+		moveDir += mCamera->GetUp();
+	}
+	if( Input::IsKeyDown( KC_Q ) )
+	{
+		moveDir -= mCamera->GetUp();
+	}
+
+	if( moveDir != vec3() )
+	{
+		vec3 offset = normalize( moveDir ) * 1.0f * Time::GetMainDeltaTime();
+		mCamera->SetPosition( mCamera->GetPosition() + offset );
+		mCamera->SetTarget( mCamera->GetTarget() + offset );
+	}
 
 	GLint location = mProgram->GetUniformLocation( "matWorld" );
-	mProgram->SetUniform( location, matWorld );
+	mProgram->SetUniform( location, mat4x4() );
 
 	location = mProgram->GetUniformLocation( "matView" );
-	mProgram->SetUniform( location, matView );
+	mProgram->SetUniform( location, mCamera->GetViewTransform() );
 
 	location = mProgram->GetUniformLocation( "matProj" );
-	mProgram->SetUniform( location, matProj );
+	mProgram->SetUniform( location, mCamera->GetProjectionTransform() );
 }
 
 

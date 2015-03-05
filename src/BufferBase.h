@@ -13,6 +13,11 @@ protected:
 	virtual ~BufferBase();
 
 public:
+	GLuint _GetId() const
+	{
+		return mId;
+	}
+
 	BufferType GetType() const
 	{
 		return mType;

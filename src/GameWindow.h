@@ -13,7 +13,10 @@ public:
 	GameWindow( const GameWindowCreationDesc & desc );
 	~GameWindow();
 
-	friend class Game;
+	GLFWwindow * _GetWindow() const
+	{
+		return mWindow;
+	}
 
 	int GetWidth() const;
 	int GetHeight() const;

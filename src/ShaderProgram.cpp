@@ -17,13 +17,13 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::AttachShader( Shader * shader )
 {
-	glAttachShader( mId, shader->mId );
+	glAttachShader( mId, shader->_GetId() );
 }
 
 
 void ShaderProgram::DetachShader( Shader * shader )
 {
-	glDetachShader( mId, shader->mId );
+	glDetachShader( mId, shader->_GetId() );
 }
 
 
