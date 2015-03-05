@@ -15,6 +15,10 @@ public:
 
 	friend class Game;
 
+	int GetWidth() const;
+	int GetHeight() const;
+	float GetAspectRatio() const;
+
 private:
 	void CreateWindowedWindow( const GameWindowCreationDesc & desc );
 	void CreateFullScreenWindow( const GameWindowCreationDesc & desc );

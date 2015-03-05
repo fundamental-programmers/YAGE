@@ -25,7 +25,7 @@ public:
 	int GetClearStencil() const;
 	void SetClearStencil( int stencil );
 
-	void Clear( BufferClearMask mask );
+	void Clear( int mask );
 
 	void DrawArrays( VertexBuffer * buffer, DrawMode mode, GLint first, GLsizei count );
 	void DrawElements( VertexBuffer * vertexBuffer, IndexBuffer * indexBuffer, DrawMode mode, GLsizei count, const GLvoid * indices );

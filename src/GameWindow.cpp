@@ -54,4 +54,28 @@ void GameWindow::CreateWindowedFullScreenWindow( const GameWindowCreationDesc & 
 }
 
 
+int GameWindow::GetWidth() const
+{
+	int width = 0, height = 0;
+	glfwGetWindowSize( mWindow, &width, &height );
+	return width;
+}
+
+
+int GameWindow::GetHeight() const
+{
+	int width = 0, height = 0;
+	glfwGetWindowSize( mWindow, &width, &height );
+	return height;
+}
+
+
+float GameWindow::GetAspectRatio() const
+{
+	int width = 0, height = 0;
+	glfwGetWindowSize( mWindow, &width, &height );
+	return static_cast<float>( width ) / static_cast<float>( height );
+}
+
+
 END_YAGE_NAMESPACE

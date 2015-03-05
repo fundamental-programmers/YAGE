@@ -61,16 +61,25 @@ void FitbosGame::Unload()
 
 void FitbosGame::Update()
 {
-	mat4x4 rotation = rotate( pi<float>() * Time::GetMainTotalTime(), vec3( 0.0f, 1.0f, 0.0f ) );
-	GLint location = mProgram->GetUniformLocation( "gRotation" );
-	mProgram->SetUniform( location, rotation );
+	mat4x4 matWorld = translate( vec3( 0.0f, 0.0f, 0.0f ) );
+	mat4x4 matProj = perspective( pi<float>() / 2.0f, this->GetWindow()->GetAspectRatio(), 1.0f, 100.0f );
+	mat4x4 matView = lookAt( vec3( 0.0f, 0.0f, 3.0f ), vec3( 0.0f, 0.0f, 0.0f ), vec3( 0.0f, 1.0f, 0.0f ) );
+
+	GLint location = mProgram->GetUniformLocation( "matWorld" );
+	mProgram->SetUniform( location, matWorld );
+
+	location = mProgram->GetUniformLocation( "matView" );
+	mProgram->SetUniform( location, matView );
+
+	location = mProgram->GetUniformLocation( "matProj" );
+	mProgram->SetUniform( location, matProj );
 }
 
 
 void FitbosGame::Draw()
 {
 	GraphicsDevice * graphics = this->GetGraphicsDevice();
-	graphics->Clear( BCM_Color );
+	graphics->Clear( BCM_Color | BCM_Depth );
 
 	graphics->DrawElements( mVertexBuffer, mIndexBuffer, DM_Triangles, 12, 0 );
 }

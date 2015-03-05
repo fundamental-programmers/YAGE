@@ -56,7 +56,7 @@ void GraphicsDevice::SetClearStencil( int stencil )
 }
 
 
-void GraphicsDevice::Clear( BufferClearMask mask )
+void GraphicsDevice::Clear( int mask )
 {
 	glClear( mask );
 }
