@@ -3,6 +3,7 @@
 #include "YageIncludes.h"
 #include "Shader.h"
 #include "Color.h"
+#include "Texture.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -34,6 +35,7 @@ public:
 	void SetUniform( GLint location, int value );
 	void SetUniform( GLint location, unsigned int value );
 	void SetUniform( GLint location, const mat4x4 & value );
+	void SetUniform( GLint location, Texture * texture, int index );
 
 private:
 	GLuint mId;

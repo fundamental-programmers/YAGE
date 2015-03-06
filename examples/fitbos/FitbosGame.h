@@ -4,6 +4,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 
 using namespace Yage;
 
@@ -18,10 +19,18 @@ protected:
 	virtual void Draw();
 
 private:
+	static const float CameraRotationSpeed;
+
+	void UpdateCameraTranslation();
+	void UpdateCameraRotation();
+
 	VertexBuffer * mVertexBuffer;
 	IndexBuffer * mIndexBuffer;
 	ShaderProgram * mProgram;
 	Shader * mVertexShader;
 	Shader * mFragmentShader;
+	Texture * mTexture;
 	Camera * mCamera;
+	vec2 mOldMousePosition;
+	bool mIsRotatingCamera;
 };

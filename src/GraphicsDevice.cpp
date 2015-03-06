@@ -6,6 +6,10 @@ BEGIN_YAGE_NAMESPACE
 GraphicsDevice::GraphicsDevice()
 {
 	glewInit();
+
+	glFrontFace( GL_CCW );
+	glCullFace( GL_BACK );
+	glEnable( GL_CULL_FACE );
 }
 
 

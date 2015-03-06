@@ -1,3 +1,4 @@
+#include <strings.h>
 #include "ShaderProgram.h"
 
 BEGIN_YAGE_NAMESPACE
@@ -109,6 +110,13 @@ void ShaderProgram::SetUniform( GLint location, unsigned int value )
 void ShaderProgram::SetUniform( GLint location, const mat4x4 & value )
 {
 	glUniformMatrix4fv( location, 1, false, value_ptr( value ) );
+}
+
+
+void ShaderProgram::SetUniform( GLint location, Texture * texture, int index )
+{
+	texture->Bind( index );
+	glUniform1i( location, index );
 }
 
 

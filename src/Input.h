@@ -18,6 +18,9 @@ public:
 
 	static bool IsKeyDown( KeyCode keyCode );
 
+	static vec2 GetMousePosition();
+	static bool IsMouseButtonDown( int button );
+
 private:
 	static void OnKey( GLFWwindow * window, int key, int scancode, int action, int mods );
 

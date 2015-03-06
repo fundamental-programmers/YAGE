@@ -6,6 +6,9 @@
 using namespace Yage;
 
 
+const float FitbosGame::CameraRotationSpeed = 0.001f;
+
+
 void FitbosGame::Initialize( GameWindowCreationDesc & desc )
 {
 }
@@ -19,17 +22,23 @@ void FitbosGame::Load()
 	mCamera->SetTarget( vec3() );
 	mCamera->SetUp( vec3( 0.0f, 1.0f, 0.0f ) );
 
+	mOldMousePosition = Input::GetMousePosition();
+	mIsRotatingCamera = false;
+
 	this->GetGraphicsDevice()->SetClearColor( Color::Black );
 
-	vec3 vertices[4];
-	vertices[0] = vec3( -1.0f, -1.0f, 0.0f );
-	vertices[1] = vec3( 0.0f, -1.0f, 1.0f );
-	vertices[2] = vec3( 1.0f, -1.0f, 0.0f );
-	vertices[3] = vec3( 0.0f, 1.0f, 0.0f );
+	float vertices[] =
+	{
+		-1.0f, -1.0f, 0.5773f, 0.0f, 0.0f,
+		0.0f, -1.0f, -1.15475f, 0.5f, 0.0f,
+		1.0f, -1.0f, 0.5773f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.5f, 1.0f
+	};
 
 	mVertexBuffer = new VertexBuffer();
 	mVertexBuffer->SetData( sizeof( vertices ), &vertices, BU_StaticDraw );
-	mVertexBuffer->AddAttribute( VertexAttribute( 0, 3, VAT_Float, false, 0, 0 ) );
+	mVertexBuffer->AddAttribute( VertexAttribute( 0, 3, VAT_Float, false, sizeof( float ) * 5, 0 ) );
+	mVertexBuffer->AddAttribute( VertexAttribute( 1, 2, VAT_Float, false, sizeof( float ) * 5, reinterpret_cast<const GLvoid *>( sizeof( float ) * 3 ) ) );
 
 	unsigned int indices[] = { 0, 3, 1, 1, 3, 2, 2, 3, 0, 0, 1, 2 };
 
@@ -54,6 +63,9 @@ void FitbosGame::Load()
 	assert( linkResult );
 
 	mProgram->Use();
+
+	mTexture = Texture::Load( "textures/test.png" );
+	mProgram->SetUniform( mProgram->GetUniformLocation( "Sampler" ), mTexture, 0 );
 }
 
 
@@ -68,6 +80,22 @@ void FitbosGame::Unload()
 
 
 void FitbosGame::Update()
+{
+	this->UpdateCameraTranslation();
+	this->UpdateCameraRotation();
+
+	GLint location = mProgram->GetUniformLocation( "matWorld" );
+	mProgram->SetUniform( location, mat4x4() );
+
+	location = mProgram->GetUniformLocation( "matView" );
+	mProgram->SetUniform( location, mCamera->GetViewTransform() );
+
+	location = mProgram->GetUniformLocation( "matProj" );
+	mProgram->SetUniform( location, mCamera->GetProjectionTransform() );
+}
+
+
+void FitbosGame::UpdateCameraTranslation()
 {
 	vec3 moveDir;
 	if( Input::IsKeyDown( KC_W ) )
@@ -101,15 +129,35 @@ void FitbosGame::Update()
 		mCamera->SetPosition( mCamera->GetPosition() + offset );
 		mCamera->SetTarget( mCamera->GetTarget() + offset );
 	}
+}
 
-	GLint location = mProgram->GetUniformLocation( "matWorld" );
-	mProgram->SetUniform( location, mat4x4() );
 
-	location = mProgram->GetUniformLocation( "matView" );
-	mProgram->SetUniform( location, mCamera->GetViewTransform() );
+void FitbosGame::UpdateCameraRotation()
+{
+	if( ! Input::IsMouseButtonDown( 0 ) )
+	{
+		mIsRotatingCamera = false;
+		return;
+	}
 
-	location = mProgram->GetUniformLocation( "matProj" );
-	mProgram->SetUniform( location, mCamera->GetProjectionTransform() );
+	if( ! mIsRotatingCamera )
+	{
+		mOldMousePosition = Input::GetMousePosition();
+		mIsRotatingCamera = true;
+		return;
+	}
+
+	vec2 currentMousePosition = Input::GetMousePosition();
+	vec2 mouseDelta = currentMousePosition - mOldMousePosition;
+	mOldMousePosition = currentMousePosition;
+
+	vec2 yawPitch = mouseDelta * CameraRotationSpeed;
+
+	quat rotation( vec3( -yawPitch.y, -yawPitch.x, 0.0f ) );
+	vec3 newForward = rotation * mCamera->GetForward();
+	vec3 target = mCamera->GetPosition() + newForward;
+
+	mCamera->SetTarget( target );
 }
 
 
