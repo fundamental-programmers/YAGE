@@ -91,7 +91,7 @@ void ShaderProgram::SetUniform( GLint location, const vec4 & value )
 
 void ShaderProgram::SetUniform( GLint location, const Color & value )
 {
-	glUniform2fv( location, 1, reinterpret_cast<const GLfloat *>( &value ) );
+	glUniform4fv( location, 1, reinterpret_cast<const GLfloat *>( &value ) );
 }
 
 

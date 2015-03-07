@@ -31,6 +31,8 @@ private:
 	Shader * mFragmentShader;
 	Texture * mTexture;
 	Camera * mCamera;
+	Color mLightColor;
+	float mAmbientIntensity;
 	vec2 mOldMousePosition;
 	bool mIsRotatingCamera;
 };

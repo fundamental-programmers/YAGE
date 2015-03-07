@@ -16,6 +16,8 @@ void FitbosGame::Initialize( GameWindowCreationDesc & desc )
 
 void FitbosGame::Load()
 {
+	srand( static_cast<unsigned int>( time( NULL ) ) );
+
 	mCamera = new Camera();
 	mCamera->SetPerspective( pi<float>() / 2.0f, this->GetWindow()->GetAspectRatio(), 0.1f, 100.0f );
 	mCamera->SetPosition( vec3( 0.0f, 0.0f, 3.0f ) );
@@ -24,6 +26,9 @@ void FitbosGame::Load()
 
 	mOldMousePosition = Input::GetMousePosition();
 	mIsRotatingCamera = false;
+
+	mLightColor = Color::White;
+	mAmbientIntensity = 1.0f;
 
 	this->GetGraphicsDevice()->SetClearColor( Color::Black );
 
@@ -84,6 +89,21 @@ void FitbosGame::Update()
 	this->UpdateCameraTranslation();
 	this->UpdateCameraRotation();
 
+	if( Input::IsKeyDown( KC_Up ) )
+	{
+		mAmbientIntensity += 2.0f * Time::GetMainDeltaTime();
+	}
+	if( Input::IsKeyDown( KC_Down ) )
+	{
+		mAmbientIntensity -= 2.0f * Time::GetMainDeltaTime();
+	}
+	if( Input::IsKeyDown( KC_Enter ) )
+	{
+		mLightColor.R = (float)rand() / RAND_MAX;
+		mLightColor.G = (float)rand() / RAND_MAX;
+		mLightColor.B = (float)rand() / RAND_MAX;
+	}
+
 	GLint location = mProgram->GetUniformLocation( "matWorld" );
 	mProgram->SetUniform( location, mat4x4() );
 
@@ -92,6 +112,12 @@ void FitbosGame::Update()
 
 	location = mProgram->GetUniformLocation( "matProj" );
 	mProgram->SetUniform( location, mCamera->GetProjectionTransform() );
+
+	location = mProgram->GetUniformLocation( "directionalLight.Color" );
+	mProgram->SetUniform( location, mLightColor );
+
+	location = mProgram->GetUniformLocation( "directionalLight.AmbientIntensity" );
+	mProgram->SetUniform( location, mAmbientIntensity );
 }
 
 
