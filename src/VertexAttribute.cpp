@@ -9,13 +9,13 @@ VertexAttribute::VertexAttribute()
 }
 
 
-VertexAttribute::VertexAttribute( GLuint index, GLint size, VertexAttributeType type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+VertexAttribute::VertexAttribute( GLuint index, GLint size, VertexAttributeType type, GLboolean normalized, GLsizei stride, size_t offset )
 : Index( index )
 , Size( size )
 , Type( type )
 , Normalized( normalized )
 , Stride( stride )
-, Pointer( pointer )
+, Pointer( reinterpret_cast<const GLvoid *>( offset ) )
 {
 }
 

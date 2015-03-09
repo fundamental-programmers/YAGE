@@ -5,6 +5,7 @@
 #include "IndexBuffer.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
+#include "Mesh.h"
 
 using namespace Yage;
 
@@ -24,8 +25,7 @@ private:
 	void UpdateCameraTranslation();
 	void UpdateCameraRotation();
 
-	VertexBuffer * mVertexBuffer;
-	IndexBuffer * mIndexBuffer;
+	std::vector<Mesh*> mMeshes;
 	ShaderProgram * mProgram;
 	Shader * mVertexShader;
 	Shader * mFragmentShader;

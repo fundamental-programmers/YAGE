@@ -11,7 +11,7 @@ class VertexBuffer;
 struct VertexAttribute
 {
 	VertexAttribute();
-	VertexAttribute( GLuint index, GLint size, VertexAttributeType type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+	VertexAttribute( GLuint index, GLint size, VertexAttributeType type, GLboolean normalized, GLsizei stride, size_t offset );
 
 	void SetToBuffer( VertexBuffer * buffer ) const;
 

@@ -1,4 +1,7 @@
 #include <iostream>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include "FitbosGame.h"
 #include "Time.h"
 #include "Input.h"
@@ -16,7 +19,12 @@ void FitbosGame::Initialize( GameWindowCreationDesc & desc )
 
 void FitbosGame::Load()
 {
-	srand( static_cast<unsigned int>( time( NULL ) ) );
+	Assimp::Importer importer;
+	const aiScene * scene = importer.ReadFile( "models/Kirby/Kirby.obj", aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs );
+	for( int i = 0; i < scene->mNumMeshes; ++i )
+	{
+		mMeshes.push_back( Mesh::Load( scene->mMeshes[i] ) );
+	}
 
 	mCamera = new Camera();
 	mCamera->SetPerspective( pi<float>() / 2.0f, this->GetWindow()->GetAspectRatio(), 0.1f, 100.0f );
@@ -31,25 +39,6 @@ void FitbosGame::Load()
 	mAmbientIntensity = 1.0f;
 
 	this->GetGraphicsDevice()->SetClearColor( Color::Black );
-
-	float vertices[] =
-	{
-		-1.0f, -1.0f, 0.5773f, 0.0f, 0.0f,
-		0.0f, -1.0f, -1.15475f, 0.5f, 0.0f,
-		1.0f, -1.0f, 0.5773f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.5f, 1.0f
-	};
-
-	mVertexBuffer = new VertexBuffer();
-	mVertexBuffer->SetData( sizeof( vertices ), &vertices, BU_StaticDraw );
-	mVertexBuffer->AddAttribute( VertexAttribute( 0, 3, VAT_Float, false, sizeof( float ) * 5, 0 ) );
-	mVertexBuffer->AddAttribute( VertexAttribute( 1, 2, VAT_Float, false, sizeof( float ) * 5, reinterpret_cast<const GLvoid *>( sizeof( float ) * 3 ) ) );
-
-	unsigned int indices[] = { 0, 3, 1, 1, 3, 2, 2, 3, 0, 0, 1, 2 };
-
-	mIndexBuffer = new IndexBuffer();
-	mIndexBuffer->SetData( sizeof( indices ), &indices, BU_StaticDraw );
-	mIndexBuffer->SetIndexType( IT_UnsignedInt );
 
 	mVertexShader = new Shader( ST_Vertex );
 	mVertexShader->LoadFromFile( "shaders/Basic.vert.glsl" );
@@ -69,8 +58,8 @@ void FitbosGame::Load()
 
 	mProgram->Use();
 
-	mTexture = Texture::Load( "textures/test.png" );
-	mProgram->SetUniform( mProgram->GetUniformLocation( "Sampler" ), mTexture, 0 );
+	//mTexture = Texture::Load( "textures/test.png" );
+	//mProgram->SetUniform( mProgram->GetUniformLocation( "Sampler" ), mTexture, 0 );
 }
 
 
@@ -79,8 +68,9 @@ void FitbosGame::Unload()
 	SafeDelete( mProgram );
 	SafeDelete( mFragmentShader );
 	SafeDelete( mVertexShader );
-	SafeDelete( mVertexBuffer );
 	SafeDelete( mCamera );
+
+	std::for_each( mMeshes.begin(), mMeshes.end(), SafeDelete<Mesh> );
 }
 
 
@@ -113,11 +103,11 @@ void FitbosGame::Update()
 	location = mProgram->GetUniformLocation( "matProj" );
 	mProgram->SetUniform( location, mCamera->GetProjectionTransform() );
 
-	location = mProgram->GetUniformLocation( "directionalLight.Color" );
-	mProgram->SetUniform( location, mLightColor );
+	//location = mProgram->GetUniformLocation( "directionalLight.Color" );
+	//mProgram->SetUniform( location, mLightColor );
 
-	location = mProgram->GetUniformLocation( "directionalLight.AmbientIntensity" );
-	mProgram->SetUniform( location, mAmbientIntensity );
+	//location = mProgram->GetUniformLocation( "directionalLight.AmbientIntensity" );
+	//mProgram->SetUniform( location, mAmbientIntensity );
 }
 
 
@@ -192,5 +182,8 @@ void FitbosGame::Draw()
 	GraphicsDevice * graphics = this->GetGraphicsDevice();
 	graphics->Clear( BCM_Color | BCM_Depth );
 
-	graphics->DrawElements( mVertexBuffer, mIndexBuffer, DM_Triangles, 12, 0 );
+	for( int i = 0; i < mMeshes.size(); ++i )
+	{
+		mMeshes[i]->Draw( graphics );
+	}
 }
