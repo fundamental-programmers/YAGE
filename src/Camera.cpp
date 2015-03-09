@@ -1,12 +1,17 @@
 #include "Camera.h"
+#include "Utilities.h"
 
 BEGIN_YAGE_NAMESPACE
 
 
 Camera::Camera()
 : mPosition( 0.0f, 0.0f, 0.0f )
-, mTarget( 0.0f, -1.0f, 0.0f )
+, mDirection( 0.0f, 0.0f, -1.0f )
 , mUp( 0.0f, 1.0f, 0.0f )
+, mFov( pi<float>() / 4.0f )
+, mAspectRatio( 1.666667f )
+, mNear( 0.1f )
+, mFar( 1000.0f )
 {
 }
 
@@ -16,33 +21,36 @@ Camera::~Camera()
 }
 
 
-vec3 Camera::GetLeft() const
+Camera * Camera::Load( const aiCamera * def )
 {
-	return cross( mUp, this->GetForward() );
+	Camera * camera = new Camera();
+	camera->SetName( def->mName.C_Str() );
+	camera->SetPosition( Utilities::ToVector3( def->mPosition ) );
+	camera->SetDirection( Utilities::ToVector3( def->mLookAt ) );
+	camera->SetUp( Utilities::ToVector3( def->mUp ) );
+	camera->SetFov( def->mHorizontalFOV );
+	camera->SetAspectRatio( def->mAspect );
+	camera->SetNear( def->mClipPlaneNear );
+	camera->SetFar( def->mClipPlaneFar );
+	return camera;
 }
 
 
-vec3 Camera::GetForward() const
+vec3 Camera::GetLeft() const
 {
-	return normalize( mTarget - mPosition );
+	return cross( mUp, this->GetDirection() );
 }
 
 
 mat4x4 Camera::GetViewTransform() const
 {
-	return lookAt( mPosition, mTarget, mUp );
+	return lookAt( mPosition, mPosition + mDirection, mUp );
 }
 
 
 mat4x4 Camera::GetProjectionTransform() const
 {
-	return mProjectionTransform;
-}
-
-
-void Camera::SetPerspective( float fov, float aspectRatio, float near, float far )
-{
-	mProjectionTransform = perspective( fov, aspectRatio, near, far );
+	return perspective( mFov, mAspectRatio, mNear, mFar );
 }
 
 

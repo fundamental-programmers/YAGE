@@ -11,9 +11,9 @@ in vec3 Normal0;
 
 out vec4 FragColor;
 
-//uniform sampler2D Sampler;
+uniform sampler2D DiffuseSampler;
 
 void main()
 {
-    FragColor = vec4( Normal0, 1.0 );
+    FragColor = texture2D( DiffuseSampler, TexCoord0 );
 }

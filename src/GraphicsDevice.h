@@ -16,6 +16,11 @@ public:
 	GraphicsDevice();
 	~GraphicsDevice();
 
+	ShaderProgram * GetDefaultShaderProgram() const
+	{
+		return mDefaultShaderProgram;
+	}
+
 	Color GetClearColor() const;
 	void SetClearColor( const Color & color );
 
@@ -33,6 +38,10 @@ public:
 private:
 	void PrepareVertexBuffer( VertexBuffer * buffer );
 	void UnprepareVertexBuffer( VertexBuffer * buffer );
+
+	ShaderProgram * mDefaultShaderProgram;
+	Shader * mDefaultVertexShader;
+	Shader * mDefaultFragmentShader;
 };
 
 

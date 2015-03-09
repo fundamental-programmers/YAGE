@@ -4,11 +4,13 @@
 #include "YageIncludes.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "GraphicsDevice.h"
+#include "Material.h"
 
 BEGIN_YAGE_NAMESPACE
 
 
-class GraphicsDevice;
+class Scene;
 
 
 class Mesh
@@ -17,7 +19,7 @@ public:
 	Mesh();
 	virtual ~Mesh();
 
-	static Mesh * Load( const aiMesh * meshDef );
+	static Mesh * Load( const aiMesh * meshDef, Scene * scene );
 
 	void Draw( GraphicsDevice * graphics );
 
@@ -30,6 +32,7 @@ private:
 	VertexBuffer * mVertexBuffer;
 	IndexBuffer * mIndexBuffer;
 	size_t mFaceCount;
+	Material * mMaterial;
 };
 
 

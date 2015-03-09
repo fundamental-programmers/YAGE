@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Mesh.h"
 #include "MeshVertexAttribute.h"
-#include "GraphicsDevice.h"
+#include "Scene.h"
 
 BEGIN_YAGE_NAMESPACE
 
@@ -21,7 +21,7 @@ Mesh::~Mesh()
 }
 
 
-Mesh * Mesh::Load( const aiMesh * meshDef )
+Mesh * Mesh::Load( const aiMesh * meshDef, Scene * scene )
 {
 	size_t stride = CalculateStride( meshDef );
 	size_t size = stride * meshDef->mNumVertices;
@@ -32,6 +32,7 @@ Mesh * Mesh::Load( const aiMesh * meshDef )
 	Mesh * mesh = new Mesh();
 	SetVertexData( meshDef, buffer, stride, mesh );
 	SetFaceData( meshDef, mesh );
+	mesh->mMaterial = scene->GetMaterial( meshDef->mMaterialIndex );
 
 	delete[] buffer;
 	return mesh;
@@ -40,6 +41,11 @@ Mesh * Mesh::Load( const aiMesh * meshDef )
 
 void Mesh::Draw( GraphicsDevice * graphics )
 {
+	ShaderProgram * program = graphics->GetDefaultShaderProgram();
+
+	Texture * diffuse = mMaterial->GetTexture( TU_Diffuse );
+	program->SetUniform( program->GetUniformLocation( "DiffuseSampler" ), diffuse, TU_Diffuse );
+
 	graphics->DrawElements( mVertexBuffer, mIndexBuffer, DM_Triangles, mFaceCount * 3, 0 );
 }
 
@@ -93,7 +99,11 @@ void Mesh::RearrangeData( const aiMesh * meshDef, char * buffer, size_t bufferSi
 		if( meshDef->HasTextureCoords( 0 ) )
 		{
 			size_t size = sizeof( float ) * 3;
-			memcpy( current, &meshDef->mTextureCoords[i], size );
+			memcpy( current, &meshDef->mTextureCoords[0][i], size );
+
+			const aiVector3D & uv = meshDef->mTextureCoords[0][i];
+			std::cout << uv.x << ", " << uv.y << ", " << uv.z << std::endl;
+
 			current += size;
 		}
 		if( meshDef->HasVertexColors( 0 ) )

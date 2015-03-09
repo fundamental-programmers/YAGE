@@ -12,11 +12,32 @@ GraphicsDevice::GraphicsDevice()
 	glEnable( GL_CULL_FACE );
 
 	glEnable( GL_DEPTH_TEST );
+
+	mDefaultVertexShader = new Shader( ST_Vertex );
+	mDefaultVertexShader->LoadFromFile( "shaders/Default.vert.glsl" );
+	bool compileResult = mDefaultVertexShader->Compile();
+	assert( compileResult );
+
+	mDefaultFragmentShader = new Shader( ST_Fragment );
+	mDefaultFragmentShader->LoadFromFile( "shaders/Default.frag.glsl" );
+	compileResult = mDefaultFragmentShader->Compile();
+	assert( compileResult );
+
+	mDefaultShaderProgram = new ShaderProgram();
+	mDefaultShaderProgram->AttachShader( mDefaultVertexShader );
+	mDefaultShaderProgram->AttachShader( mDefaultFragmentShader );
+	bool linkResult = mDefaultShaderProgram->Link();
+	assert( linkResult );
+
+	mDefaultShaderProgram->Use();
 }
 
 
 GraphicsDevice::~GraphicsDevice()
 {
+	SafeDelete( mDefaultVertexShader );
+	SafeDelete( mDefaultFragmentShader );
+	SafeDelete( mDefaultShaderProgram );
 }
 
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <assimp/camera.h>
 #include "YageIncludes.h"
 
 BEGIN_YAGE_NAMESPACE
@@ -10,6 +11,18 @@ public:
 	Camera();
 	virtual ~Camera();
 
+	static Camera * Load( const aiCamera * def );
+
+	const std::string & GetName() const
+	{
+		return mName;
+	}
+
+	void SetName( const std::string & name )
+	{
+		mName = name;
+	}
+
 	const vec3 & GetPosition() const
 	{
 		return mPosition;
@@ -20,14 +33,14 @@ public:
 		mPosition = position;
 	}
 
-	const vec3 & GetTarget() const
+	const vec3 & GetDirection() const
 	{
-		return mTarget;
+		return mDirection;
 	}
 
-	void SetTarget( const vec3 & target )
+	void SetDirection( const vec3 & direction )
 	{
-		mTarget = target;
+		mDirection = direction;
 	}
 
 	const vec3 & GetUp() const
@@ -40,19 +53,60 @@ public:
 		mUp = up;
 	}
 
+	float GetFov() const
+	{
+		return mFov;
+	}
+
+	void SetFov( float fov )
+	{
+		mFov = fov;
+	}
+
+	float GetAspectRatio() const
+	{
+		return mAspectRatio;
+	}
+
+	void SetAspectRatio( float aspectRatio )
+	{
+		mAspectRatio = aspectRatio;
+	}
+
+	float GetNear() const
+	{
+		return mNear;
+	}
+
+	void SetNear( float near )
+	{
+		mNear = near;
+	}
+
+	float GetFar() const
+	{
+		return mFar;
+	}
+
+	void SetFar( float far )
+	{
+		mFar = far;
+	}
+
 	vec3 GetLeft() const;
-	vec3 GetForward() const;
 
 	mat4x4 GetViewTransform() const;
 	mat4x4 GetProjectionTransform() const;
 
-	void SetPerspective( float fov, float aspectRatio, float near, float far );
-
 private:
+	std::string mName;
 	vec3 mPosition;
-	vec3 mTarget;
+	vec3 mDirection;
 	vec3 mUp;
-	mat4x4 mProjectionTransform;
+	float mFov;
+	float mAspectRatio;
+	float mNear;
+	float mFar;
 };
 
 

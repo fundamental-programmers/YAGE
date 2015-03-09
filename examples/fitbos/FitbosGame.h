@@ -4,8 +4,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ShaderProgram.h"
-#include "Texture.h"
-#include "Mesh.h"
+#include "Scene.h"
 
 using namespace Yage;
 
@@ -25,14 +24,8 @@ private:
 	void UpdateCameraTranslation();
 	void UpdateCameraRotation();
 
-	std::vector<Mesh*> mMeshes;
-	ShaderProgram * mProgram;
-	Shader * mVertexShader;
-	Shader * mFragmentShader;
-	Texture * mTexture;
+	Scene * mScene;
 	Camera * mCamera;
-	Color mLightColor;
-	float mAmbientIntensity;
 	vec2 mOldMousePosition;
 	bool mIsRotatingCamera;
 };
